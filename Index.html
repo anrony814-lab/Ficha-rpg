@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha de Personagem</title>
+  <style>
+    :root {
+      --border-color: #2c2c2c;
+      --card-bg: #ffffff;
+      --accent-color: #3b82f6;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .sheet-container {
+      width: 100%;
+      max-width: 500px;
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      padding: 16px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .btn:hover { background: #2563eb; }
+    .btn-green { background: #10b981; }
+    .btn-green:hover { background: #059669; }
+    .btn-danger { background: #ef4444; }
+    .btn-danger:hover { background: #dc2626; }
+
+    /* Painel de Fichas Salvas */
+    .history-panel {
+      background: #f1f5f9;
+      border: 2px dashed #94a3b8;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 6px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .history-item-info {
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+      flex-grow: 1;
+    }
+
+    .history-item-info:hover { color: #2563eb; }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: bold;
+      font-size: 18px;
+      width: 100%;
+    }
+
+    input[type="text"], select {
+      border: none;
+      border-bottom: 2px solid var(--border-color);
+      font-size: 16px;
+      outline: none;
+      width: 100%;
+      background: transparent;
+      padding: 2px;
+    }
+
+    .hp-container {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 8px 0;
+    }
+
+    .hp-circle {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .hp-circle.active { background-color: var(--border-color); }
+
+    .grid-middle {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 6px;
+    }
+
+    .pericia-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .pericia-item input[type="text"] {
+      border: 2px solid var(--border-color);
+      padding: 4px;
+      font-size: 14px;
+    }
+
+    .pericia-val { width: 35px !important; text-align: center; font-weight: bold; }
+
+    .pe-box {
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .pe-box input { text-align: center; font-size: 18px; font-weight: bold; width: 50px; }
+
+    .accordion-item {
+      border: 1px solid var(--border-color);
+      margin-bottom: 4px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      background: #e5e7eb;
+      padding: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 8px;
+      background: white;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .accordion-content.open { display: flex; }
+    .accordion-content label { font-size: 11px; font-weight: bold; margin-top: 2px; }
+
+    .items-list input {
+      border: 1px solid #ccc;
+      margin-bottom: 4px;
+      padding: 4px;
+      font-size: 12px;
+    }
+
+    .hidden { display: none !important; }
+
+    .apice-section {
+      background: #fef3c7;
+      border: 2px solid #d97706;
+      padding: 8px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sheet-container">
+  <!-- Botões Superiores -->
+  <div class="toolbar">
+    <button class="btn btn-green" onclick="salvarNoHistorico()">💾 Salvar Personagem</button>
+    <button class="btn" onclick="togglePainelHistorico()">📂 Fichas Salvas</button>
+    <button class="btn" onclick="exportarJSON()">📥 Baixar Arquivo</button>
+    <button class="btn" onclick="document.getElementById('importInput').click()">📤 Importar Arquivo</button>
+    <input type="file" id="importInput" class="hidden" accept=".json" onchange="importarJSON(event)">
+  </div>
+
+  <!-- Painel de Fichas Salvas -->
+  <div id="painelHistorico" class="history-panel hidden">
+    <div class="section-title" style="border:none; margin:0;">
+      <span>Fichas Guardadas neste Aparelho</span>
+      <button class="btn btn-danger" style="padding:2px 6px;" onclick="togglePainelHistorico()">X</button>
+    </div>
+    <div id="listaHistorico" class="history-list"></div>
+  </div>
+
+  <!-- Header da Ficha -->
+  <div class="header-row">
+    <div class="input-group">
+      <label>Nome:</label>
+      <input type="text" id="nome">
+    </div>
+    <div class="input-group" style="width: 120px;">
+      <label>LV:</label>
+      <select id="level" onchange="atualizarRegrasLevel()">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="input-group">
+    <label>Classe:</label>
+    <input type="text" id="classe">
+  </div>
+
+  <!-- Bolinhas de HP -->
+  <div class="hp-container" id="hpContainer"></div>
+
+  <!-- Meio -->
+  <div class="grid-middle">
+    <div>
+      <div class="section-title">Perícias</div>
+      <div id="periciasContainer">
+        <div class="pericia-item"><input type="text" placeholder="Perícia 1"><input type="text" class="pericia-val" value="+2"></div>
+        <div class="pericia-item"><input type="text" placeholder="Perícia 2"><input type="text" class="pericia-val" value="+1"></div>
+        <div class="pericia-item"><input type="text" placeholder="Perícia 3"><input type="text" class="pericia-val" value="-1"></div>
+        <div class="pericia-item"><input type="text" placeholder="Perícia 4"><input type="text" class="pericia-val" value="-2"></div>
+      </div>
+
+      <div class="pe-box">
+        <label>PE</label><br>
+        <input type="text" id="peVal" value="0">
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">
+        Habilidades 
+        <button class="btn" style="padding: 2px 6px;" onclick="adicionarHabilidade()">+</button>
+      </div>
+      <div id="habilidadesContainer"></div>
+    </div>
+  </div>
+
+  <!-- Efeitos de classe -->
+  <div>
+    <div class="section-title">
+      Efeitos de classe
+      <button class="btn" style="padding: 2px 6px;" onclick="adicionarEfeitoClasse()">+</button>
+    </div>
+    <div id="efeitosClasseContainer"></div>
+  </div>
+
+  <!-- Itens -->
+  <div>
+    <div class="section-title">Itens</div>
+    <div class="items-list" id="itensContainer">
+      <input type="text" placeholder="Item 1">
+      <input type="text" placeholder="Item 2">
+      <input type="text" placeholder="Item 3">
+      <input type="text" placeholder="Item 4">
+      <input type="text" placeholder="Item 5">
+    </div>
+  </div>
+
+  <!-- Ápice (LV 10) -->
+  <div id="apiceSection" class="apice-section hidden">
+    <div class="section-title" style="color: #b45309; border-color: #d97706;">Ápice (Level 10)</div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <span class="apice-nome-label">Habilidade do Ápice</span> ▼
+      </div>
+      <div class="accordion-content open">
+        <label>Nome:</label><input type="text" class="apice-field" oninput="atualizarAccordionHeader(this, '.apice-nome-label')">
+        <label>Efeito:</label><input type="text" class="apice-field">
+        <label>Alcance:</label><input type="text" class="apice-field">
+        <label>Custo:</label><input type="text" class="apice-field">
+        <label>Requisito:</label><input type="text" class="apice-field">
+        <label>Limitação:</label><input type="text" class="apice-field">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let hpStates = [];
+
+  function calcularQtdBolinhas(level) {
+    if (level == 1) return 6;
+    if (level == 2 || level == 3) return 7;
+    if (level == 4 || level == 5) return 8;
+    if (level == 6 || level == 7) return 9;
+    return 10;
+  }
+
+  function renderHP() {
+    const level = parseInt(document.getElementById('level').value);
+    const qtdTotal = calcularQtdBolinhas(level);
+    const container = document.getElementById('hpContainer');
+    container.innerHTML = '';
+
+    for (let i = 0; i < qtdTotal; i++) {
+      const circle = document.createElement('div');
+      circle.className = 'hp-circle' + (hpStates[i] ? ' active' : '');
+      circle.onclick = () => {
+        hpStates[i] = !hpStates[i];
+        circle.classList.toggle('active');
+        salvarAuto();
+      };
+      container.appendChild(circle);
+    }
+  }
+
+  function atualizarRegrasLevel() {
+    renderHP();
+    const level = parseInt(document.getElementById('level').value);
+    const apiceSec = document.getElementById('apiceSection');
+    if (level === 10) {
+      apiceSec.classList.remove('hidden');
+    } else {
+      apiceSec.classList.add('hidden');
+    }
+    salvarAuto();
+  }
+
+  function toggleAccordion(header) {
+    header.nextElementSibling.classList.toggle('open');
+  }
+
+  function atualizarAccordionHeader(input, targetSelector) {
+    const item = input.closest('.accordion-item');
+    item.querySelector(targetSelector).innerText = input.value || 'Nova Habilidade';
+  }
+
+  function adicionarHabilidade(dados = {}) {
+    const container = document.getElementById('habilidadesContainer');
+    const id = Date.now();
+    const html = `
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span class="hab-title-${id}">${dados.nome || 'Nova Habilidade'}</span> ▼
+        </div>
+        <div class="accordion-content">
+          <label>Nome:</label><input type="text" value="${dados.nome || ''}" oninput="document.querySelector('.hab-title-${id}').innerText = this.value || 'Nova Habilidade'; salvarAuto();">
+          <label>Efeito:</label><input type="text" value="${dados.efeito || ''}" oninput="salvarAuto()">
+          <label>Alcance:</label><input type="text" value="${dados.alcance || ''}" oninput="salvarAuto()">
+          <label>Custo:</label><input type="text" value="${dados.custo || ''}" oninput="salvarAuto()">
+          <label>Requisito:</label><input type="text" value="${dados.requisito || ''}" oninput="salvarAuto()">
+          <label>Limitação:</label><input type="text" value="${dados.limitacao || ''}" oninput="salvarAuto()">
+          <button class="btn btn-danger" style="margin-top:6px;" onclick="this.closest('.accordion-item').remove(); salvarAuto();">Excluir</button>
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+  }
+
+  function adicionarEfeitoClasse(dados = {}) {
+    const container = document.getElementById('efeitosClasseContainer');
+    const id = Date.now();
+    const html = `
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span class="eff-title-${id}">${dados.nome || 'Novo Efeito'}</span> ▼
+        </div>
+        <div class="accordion-content">
+          <label>Nome:</label><input type="text" value="${dados.nome || ''}" oninput="document.querySelector('.eff-title-${id}').innerText = this.value || 'Novo Efeito'; salvarAuto();">
+          <label>Efeito Passivo:</label><input type="text" value="${dados.efeitoPassivo || ''}" oninput="salvarAuto()">
+          <label>Fraqueza:</label><input type="text" value="${dados.fraqueza || ''}" oninput="salvarAuto()">
+          <label>Conceito:</label><input type="text" value="${dados.conceito || ''}" oninput="salvarAuto()">
+          <button class="btn btn-danger" style="margin-top:6px;" onclick="this.closest('.accordion-item').remove(); salvarAuto();">Excluir</button>
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+  }
+
+  function obterDadosFormulario() {
+    return {
+      nome: document.getElementById('nome').value,
+      classe: document.getElementById('classe').value,
+      level: document.getElementById('level').value,
+      pe: document.getElementById('peVal').value,
+      hpStates: hpStates,
+      pericias: Array.from(document.querySelectorAll('.pericia-item')).map(item => ({
+        nome: item.children[0].value,
+        val: item.children[1].value
+      })),
+      habilidades: Array.from(document.querySelectorAll('#habilidadesContainer .accordion-item')).map(item => {
+        const inputs = item.querySelectorAll('input');
+        return { nome: inputs[0].value, efeito: inputs[1].value, alcance: inputs[2].value, custo: inputs[3].value, requisito: inputs[4].value, limitacao: inputs[5].value };
+      }),
+      efeitosClasse: Array.from(document.querySelectorAll('#efeitosClasseContainer .accordion-item')).map(item => {
+        const inputs = item.querySelectorAll('input');
+        return { nome: inputs[0].value, efeitoPassivo: inputs[1].value, fraqueza: inputs[2].value, conceito: inputs[3].value };
+      }),
+      itens: Array.from(document.querySelectorAll('#itensContainer input')).map(i => i.value),
+      apice: Array.from(document.querySelectorAll('.apice-field')).map(i => i.value)
+    };
+  }
+
+  function carregarDadosFormulario(data) {
+    document.getElementById('nome').value = data.nome || '';
+    document.getElementById('classe').value = data.classe || '';
+    document.getElementById('level').value = data.level || '1';
+    document.getElementById('peVal').value = data.pe || '0';
+    hpStates = data.hpStates || [];
+
+    atualizarRegrasLevel();
+
+    if (data.pericias) {
+      const pInputs = document.querySelectorAll('.pericia-item');
+      data.pericias.forEach((p, idx) => {
+        if (pInputs[idx]) {
+          pInputs[idx].children[0].value = p.nome;
+          pInputs[idx].children[1].value = p.val;
+        }
+      });
+    }
+
+    document.getElementById('habilidadesContainer').innerHTML = '';
+    (data.habilidades || []).forEach(h => adicionarHabilidade(h));
+
+    document.getElementById('efeitosClasseContainer').innerHTML = '';
+    (data.efeitosClasse || []).forEach(e => adicionarEfeitoClasse(e));
+
+    if (data.itens) {
+      const itemInputs = document.querySelectorAll('#itensContainer input');
+      data.itens.forEach((it, idx) => { if (itemInputs[idx]) itemInputs[idx].value = it; });
+    }
+
+    if (data.apice) {
+      const apiceInputs = document.querySelectorAll('.apice-field');
+      data.apice.forEach((val, idx) => { if (apiceInputs[idx]) apiceInputs[idx].value = val; });
+    }
+  }
+
+  // --- GERENCIAMENTO DE HISTÓRICO LOCAL ---
+
+  function salvarNoHistorico() {
+    const data = obterDadosFormulario();
+    const nomePersonagem = data.nome.trim() || "Personagem sem Nome";
+    
+    let historico = JSON.parse(localStorage.getItem('fichas_historico') || '{}');
+    historico[nomePersonagem] = data;
+    
+    localStorage.setItem('fichas_historico', JSON.stringify(historico));
+    alert(`Ficha de "${nomePersonagem}" salva com sucesso!`);
+    renderizarHistorico();
+  }
+
+  function carregarDoHistorico(chave) {
+    let historico = JSON.parse(localStorage.getItem('fichas_historico') || '{}');
+    if (historico[chave]) {
+      carregarDadosFormulario(historico[chave]);
+      salvarAuto();
+      togglePainelHistorico();
+    }
+  }
+
+  function deletarDoHistorico(chave) {
+    if (confirm(`Deseja apagar a ficha "${chave}"?`)) {
+      let historico = JSON.parse(localStorage.getItem('fichas_historico') || '{}');
+      delete historico[chave];
+      localStorage.setItem('fichas_historico', JSON.stringify(historico));
+      renderizarHistorico();
+    }
+  }
+
+  function renderizarHistorico() {
+    const lista = document.getElementById('listaHistorico');
+    let historico = JSON.parse(localStorage.getItem('fichas_historico') || '{}');
+    const chaves = Object.keys(historico);
+
+    if (chaves.length === 0) {
+      lista.innerHTML = '<div style="font-size:12px; color:#64748b;">Nenhuma ficha salva ainda.</div>';
+      return;
+    }
+
+    lista.innerHTML = chaves.map(chave => `
+      <div class="history-item">
+        <span class="history-item-info" onclick="carregarDoHistorico('${chave}')">👤 ${chave}</span>
+        <button class="btn btn-danger" style="padding:2px 6px;" onclick="deletarDoHistorico('${chave}')">🗑️</button>
+      </div>
+    `).join('');
+  }
+
+  function togglePainelHistorico() {
+    const painel = document.getElementById('painelHistorico');
+    painel.classList.toggle('hidden');
+    if (!painel.classList.contains('hidden')) {
+      renderizarHistorico();
+    }
+  }
+
+  // --- AUTO-SAVE E EXPORTAÇÃO ---
+
+  function salvarAuto() {
+    localStorage.setItem('fichaRPG_autosave', JSON.stringify(obterDadosFormulario()));
+  }
+
+  function carregarAuto() {
+    const savedData = localStorage.getItem('fichaRPG_autosave');
+    if (savedData) {
+      carregarDadosFormulario(JSON.parse(savedData));
+    } else {
+      atualizarRegrasLevel();
+    }
+  }
+
+  function exportarJSON() {
+    const data = obterDadosFormulario();
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `${data.nome || 'ficha'}_RPG.json`);
+    dlAnchor.click();
+  }
+
+  function importarJSON(event) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const data = JSON.parse(e.target.result);
+      carregarDadosFormulario(data);
+      salvarAuto();
+      if (data.nome) salvarNoHistorico();
+    };
+    reader.readAsText(event.target.files[0]);
+  }
+
+  document.addEventListener('input', salvarAuto);
+  window.addEventListener('DOMContentLoaded', carregarAuto);
+</script>
+</body>
+  </html>
+                                                                               
