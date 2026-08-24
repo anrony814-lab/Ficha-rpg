@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ficha de Personagem</title>
+  
+  <!-- Ícone para a Tela Inicial do Celular -->
+  <link rel="icon" href="https://cdn.discordapp.com/attachments/1533867537064919202/1541272638167715911/Design_sem_nome_20260823_232633_0000.jpg">
+  <link rel="apple-touch-icon" href="https://cdn.discordapp.com/attachments/1533867537064919202/1541272638167715911/Design_sem_nome_20260823_232633_0000.jpg">
+
   <style>
     :root {
       --border-color: #2c2c2c;
@@ -94,13 +99,31 @@
 
     .history-item-info:hover { color: #2563eb; }
 
+    /* Perfil do Personagem */
+    .profile-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .profile-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      object-fit: cover;
+      cursor: pointer;
+      background: #ccc;
+    }
+
     .header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 8px;
+      flex-grow: 1;
     }
 
     .input-group {
@@ -249,26 +272,29 @@
     <div id="listaHistorico" class="history-list"></div>
   </div>
 
-  <!-- Header da Ficha -->
-  <div class="header-row">
-    <div class="input-group">
-      <label>Nome:</label>
-      <input type="text" id="nome">
-    </div>
-    <div class="input-group" style="width: 120px;">
-      <label>LV:</label>
-      <select id="level" onchange="atualizarRegrasLevel()">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-      </select>
+  <!-- Header da Ficha com Foto de Perfil -->
+  <div class="profile-section">
+    <img id="avatarImg" class="profile-avatar" src="https://cdn.discordapp.com/attachments/1533867537064919202/1541272638167715911/Design_sem_nome_20260823_232633_0000.jpg" alt="Foto de Perfil" title="Clique para alterar a foto" onclick="alterarAvatar()">
+    <div class="header-row">
+      <div class="input-group">
+        <label>Nome:</label>
+        <input type="text" id="nome">
+      </div>
+      <div class="input-group" style="width: 100px;">
+        <label>LV:</label>
+        <select id="level" onchange="atualizarRegrasLevel()">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+      </div>
     </div>
   </div>
 
@@ -348,6 +374,16 @@
 
 <script>
   let hpStates = [];
+  let avatarUrl = "https://cdn.discordapp.com/attachments/1533867537064919202/1541272638167715911/Design_sem_nome_20260823_232633_0000.jpg";
+
+  function alterarAvatar() {
+    const novaUrl = prompt("Insira o link da nova foto de perfil:", avatarUrl);
+    if (novaUrl) {
+      avatarUrl = novaUrl.trim();
+      document.getElementById('avatarImg').src = avatarUrl;
+      salvarAuto();
+    }
+  }
 
   function calcularQtdBolinhas(level) {
     if (level == 1) return 6;
@@ -444,6 +480,7 @@
       classe: document.getElementById('classe').value,
       level: document.getElementById('level').value,
       pe: document.getElementById('peVal').value,
+      avatar: avatarUrl,
       hpStates: hpStates,
       pericias: Array.from(document.querySelectorAll('.pericia-item')).map(item => ({
         nome: item.children[0].value,
@@ -467,8 +504,13 @@
     document.getElementById('classe').value = data.classe || '';
     document.getElementById('level').value = data.level || '1';
     document.getElementById('peVal').value = data.pe || '0';
-    hpStates = data.hpStates || [];
+    
+    if (data.avatar) {
+      avatarUrl = data.avatar;
+      document.getElementById('avatarImg').src = avatarUrl;
+    }
 
+    hpStates = data.hpStates || [];
     atualizarRegrasLevel();
 
     if (data.pericias) {
@@ -565,6 +607,8 @@
   function carregarAuto() {
     const savedData = localStorage.getItem('fichaRPG_autosave');
     if (savedData) {
+      localStorage.getItem('fichaRPG_autosave');
+    if (savedData) {
       carregarDadosFormulario(JSON.parse(savedData));
     } else {
       atualizarRegrasLevel();
@@ -595,5 +639,4 @@
   window.addEventListener('DOMContentLoaded', carregarAuto);
 </script>
 </body>
-  </html>
-  
+</html>
