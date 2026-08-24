@@ -1,0 +1,84 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #1e1e1e;
+  color: #dcddde;
+  margin: 0;
+  padding: 20px;
+}
+
+.nav-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.nav-bar button {
+  background: #2f3136;
+  color: #fff;
+  border: 1px solid #40444b;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.nav-bar button:hover {
+  background: #5865f2;
+}
+
+.aba-conteudo {
+  display: none;
+}
+
+.aba-conteudo.ativa {
+  display: block;
+}
+
+/* Ficha */
+.card-personagem, .painel-obsidian {
+  background: #2b2d31;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.foto-container {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.foto-container img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #5865f2;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+.status-vitalidade {
+  margin: 15px 0;
+  font-size: 1.1em;
+}
+
+.status-vitalidade input {
+  width: 60px;
+  padding: 5px;
+  background: #1e1e1e;
+  color: #fff;
+  border: 1px solid #40444b;
+  text-align: center;
+}
+
+/* Obsidian Theme Elements */
+textarea#nota-obsidian {
+  width: 100%;
+  height: 150px;
+  background: #1e1e1e;
+  color: #8e9297;
+  border: 1px solid #40444b;
+  padding: 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
