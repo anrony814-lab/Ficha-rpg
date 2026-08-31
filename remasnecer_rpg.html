@@ -1,0 +1,2217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remasnecer RPG - Compêndio & GM System</title>
+  <style>
+    :root {
+      --border-color: #2c2c2c;
+      --card-bg: #ffffff;
+      --primary-blue: #3b82f6;
+      --bg-color: #e5e7eb;
+      --dark-text: #0f172a;
+      --paper-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: text;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--dark-text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 8px 32px 8px;
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 760px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* BARRA SUPERIOR */
+    .navbar {
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--dark-text);
+      letter-spacing: 1px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .icon-svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* BOTÕES COM ESTILO PERSONALIZADO */
+    .btn {
+      background: #3b82f6;
+      color: white;
+      border: 2px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      text-decoration: none;
+      transition: background-color 0.15s, transform 0.1s;
+    }
+
+    .btn:active { transform: scale(0.96); }
+    .btn:hover { background: #2563eb; }
+    .btn-green { background: #10b981; }
+    .btn-green:hover { background: #059669; }
+    .btn-danger { background: #ef4444; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-dark { background: #374151; }
+    .btn-dark:hover { background: #1f2937; }
+    .btn-warning { background: #d97706; }
+    .btn-warning:hover { background: #b45309; }
+    .btn-purple { background: #8b5cf6; }
+    .btn-purple:hover { background: #7c3aed; }
+
+    /* BARRA DE FERRAMENTA DE DOWNLOAD E CÓDIGO */
+    .export-code-bar {
+      background: #1e1b4b;
+      color: #ffffff;
+      border: 3px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* CONTAINER PADRÃO DA FICHA */
+    .sheet-card {
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      padding: 18px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      border-radius: 8px;
+    }
+
+    /* TELA INICIAL */
+    .home-sheet-container {
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      padding: 20px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .home-main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 520px) {
+      .home-main-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .home-app-card {
+      background: #ffffff;
+      border: 3px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 0px var(--border-color);
+      transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s;
+      min-height: 140px;
+    }
+
+    .home-app-card:hover {
+      background: #f8fafc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0px var(--border-color);
+    }
+
+    .home-app-card:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0px var(--border-color);
+    }
+
+    .home-card-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      background: #f1f5f9;
+    }
+
+    .home-card-title {
+      font-weight: bold;
+      font-size: 15px;
+      color: var(--dark-text);
+    }
+
+    .home-card-desc {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* FICHA DE PERSONAGEM & CRIATURAS */
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .history-panel {
+      background: #f1f5f9;
+      border: 2px dashed #94a3b8;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .history-item-info {
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      flex-grow: 1;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    input[type="text"], select {
+      border: none;
+      border-bottom: 2px solid var(--border-color);
+      font-size: 16px;
+      outline: none;
+      width: 100%;
+      background: transparent;
+      padding: 4px;
+      font-family: inherit;
+    }
+
+    .hp-container {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 12px 6px;
+      background: #f8fafc;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+    }
+
+    .hp-circle {
+      width: 26px;
+      height: 26px;
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .hp-circle:active { transform: scale(0.9); }
+    .hp-circle.active { background-color: var(--border-color); }
+
+    .grid-middle {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 520px) {
+      .grid-middle { grid-template-columns: 1fr; }
+    }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+    }
+
+    .pericia-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .pericia-item input[type="text"] {
+      border: 2px solid var(--border-color);
+      padding: 6px 8px;
+      font-size: 15px;
+      border-radius: 4px;
+    }
+
+    .pericia-val { width: 48px !important; text-align: center; font-weight: bold; }
+
+    .pe-box {
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      margin-top: 10px;
+      background: #f8fafc;
+    }
+
+    .pe-box input { text-align: center; font-size: 20px; font-weight: bold; width: 60px; }
+
+    .accordion-item {
+      border: 2px solid var(--border-color);
+      margin-bottom: 6px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      background: #e5e7eb;
+      padding: 8px 10px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 10px;
+      background: white;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .accordion-content.open { display: flex; }
+    .accordion-content label { font-size: 12px; font-weight: bold; margin-top: 2px; color: #475569; }
+    .accordion-content input {
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+      padding: 6px;
+      font-size: 14px;
+    }
+
+    .items-list input {
+      border: 2px solid var(--border-color);
+      margin-bottom: 8px;
+      padding: 10px;
+      font-size: 15px;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ESTILO EXCLUSIVO DA FICHA DE MONSTROS / CRIATURAS */
+    .monster-card-frame {
+      border: 4px solid var(--border-color);
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .monster-circles-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .monster-boxes-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .monster-square-box {
+      border: 3px solid var(--border-color);
+      border-radius: 8px;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+    }
+
+    .monster-square-box label {
+      font-weight: 900;
+      font-size: 16px;
+      margin-bottom: 2px;
+    }
+
+    .monster-square-box input {
+      border: none;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 900;
+      width: 100%;
+      outline: none;
+      background: transparent;
+    }
+
+    /* GOOGLE DOCS LIVRO DE REGRAS */
+    .docs-container {
+      background: #ffffff;
+      border: 3px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+      overflow: hidden;
+    }
+
+    .docs-toolbar {
+      background: #f1f5f9;
+      border-bottom: 3px solid var(--border-color);
+      padding: 8px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .docs-tool-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+      padding: 2px 4px;
+    }
+
+    .docs-btn {
+      background: transparent;
+      border: none;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 13px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #334155;
+    }
+
+    .docs-btn:hover { background: #e2e8f0; }
+
+    .docs-select {
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 4px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .docs-paper-area {
+      background: #e2e8f0;
+      padding: 20px 12px;
+      display: flex;
+      justify-content: center;
+      min-height: 500px;
+    }
+
+    .docs-page-sheet {
+      background: var(--paper-bg);
+      border: 3px solid var(--border-color);
+      width: 100%;
+      max-width: 620px;
+      min-height: 560px;
+      padding: 24px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .docs-editable-content {
+      outline: none;
+      min-height: 220px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1e293b;
+      word-break: break-word;
+    }
+
+    .drawing-panel {
+      background: #f8fafc;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .canvas-wrapper {
+      width: 100%;
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+      background: #ffffff;
+      touch-action: none;
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      background: #ffffff;
+      cursor: crosshair;
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* MODAL & TOAST NOTIFICATION */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.65);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      padding: 16px;
+    }
+
+    .modal-box {
+      background: white;
+      border: 3px solid var(--border-color);
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    #toastNotification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1e1b4b;
+      color: white;
+      border: 3px solid var(--border-color);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      z-index: 20000;
+      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      opacity: 0;
+      pointer-events: none;
+      text-align: center;
+      max-width: 90vw;
+    }
+
+    #toastNotification.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* GM SYSTEM ESTILOS */
+    .gm-tab-box {
+      border: 2px solid var(--border-color);
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sheet-card.floating-sheet {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      width: 360px;
+      max-width: 92vw;
+      max-height: 75vh;
+      overflow-y: auto;
+      z-index: 9999;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      border: 3px solid var(--border-color);
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 12px;
+    }
+
+    .floating-handle {
+      display: none;
+      background: #1e1b4b;
+      color: white;
+      padding: 8px 12px;
+      margin: -12px -12px 10px -12px;
+      border-radius: 6px 6px 0 0;
+      font-weight: bold;
+      font-size: 13px;
+      cursor: move;
+      user-select: none;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: -12px;
+      z-index: 10;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .sheet-card.floating-sheet .floating-handle {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- BARRA DE FERRAMENTA DE EXPORTAR E BAIXAR CÓDIGO -->
+  <div class="export-code-bar">
+    <span style="font-weight: 900; font-size: 13px;">📋 Aplicativo RPG Completo (Offline & Web)</span>
+    <div style="display: flex; gap: 6px;">
+      <button class="btn btn-green" onclick="baixarArquivoHTML()">📥 Baixar .html</button>
+      <button class="btn btn-purple" onclick="copiarCodigoFonte()">📋 Copiar Código</button>
+    </div>
+  </div>
+
+  <!-- BARRA SUPERIOR DE NAVEGAÇÃO -->
+  <div class="navbar">
+    <div class="nav-brand" onclick="navTo('home')">
+      <canvas id="navMoonCanvas" width="28" height="28" style="border: 2px solid #2c2c2c; border-radius: 4px;"></canvas>
+      <span>Remasnecer</span>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-dark" onclick="navTo('home')">🏠 Início</button>
+      <button class="btn" onclick="navTo('ficha')">📜 Ficha</button>
+      <button class="btn btn-purple" onclick="toggleFloatFicha()">📌 Flutuar</button>
+      <button class="btn btn-warning" onclick="abrirFichaPopout()">🗔 Pop-out</button>
+      <button class="btn btn-green" onclick="navTo('regras')">📖 Regras</button>
+      <button class="btn btn-warning" onclick="navTo('criaturas')">👹 Criaturas</button>
+      <button class="btn btn-purple" onclick="navTo('gmsystem')">🎲 GM System</button>
+    </div>
+  </div>
+
+  <!-- ==================== TELA INICIAL ==================== -->
+  <div id="page-home" class="home-sheet-container">
+    <div class="home-main-grid">
+      <!-- Opção 1: Ficha de Personagem -->
+      <div class="home-app-card" onclick="navTo('ficha')">
+        <div class="home-card-icon-box" style="color: #3b82f6;">
+          <svg class="icon-svg" style="width: 28px; height: 28px;" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-2.33 4.67-3.5 7-3.5s7 1.17 7 3.5V19z"/></svg>
+        </div>
+        <div class="home-card-title">Ficha de Personagem</div>
+        <div class="home-card-desc">Atributos, HP, PE, habilidades e inventário.</div>
+      </div>
+
+      <!-- Opção 2: Livro de Regras -->
+      <div class="home-app-card" onclick="navTo('regras')">
+        <div class="home-card-icon-box" style="color: #10b981;">
+          <svg class="icon-svg" style="width: 28px; height: 28px;" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+        </div>
+        <div class="home-card-title">Livro de Regras</div>
+        <div class="home-card-desc">Estilo Google Docs atualizado pelo Mestre.</div>
+      </div>
+
+      <!-- Opção 3: Criaturas / Monstros -->
+      <div class="home-app-card" onclick="navTo('criaturas')">
+        <div class="home-card-icon-box" style="color: #d97706;">
+          <svg class="icon-svg" style="width: 28px; height: 28px;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        </div>
+        <div class="home-card-title">Ficha de Criaturas</div>
+        <div class="home-card-desc">Bolinhas ajustáveis, PE, HP e graus 0-5 ao Ápice.</div>
+      </div>
+
+      <!-- Opção 4: GM System -->
+      <div class="home-app-card" onclick="navTo('gmsystem')">
+        <div class="home-card-icon-box" style="color: #8b5cf6;">
+          <svg class="icon-svg" style="width: 28px; height: 28px;" viewBox="0 0 24 24"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+        </div>
+        <div class="home-card-title">GM System (Mestre)</div>
+        <div class="home-card-desc">Combate, dados, relógio de progresso e geradores.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FICHA DE PERSONAGEM ==================== -->
+  <div id="page-ficha" class="sheet-card hidden">
+    <!-- HANDLE DE ARRASTAR MODO FLUTUANTE -->
+    <div id="fichaFloatHandle" class="floating-handle" onmousedown="iniciarArrastoFicha(event)" ontouchstart="iniciarArrastoFicha(event)">
+      <span>📌 Ficha Flutuante (Arraste aqui)</span>
+      <button class="btn btn-dark" style="padding: 2px 6px; font-size: 11px;" onclick="toggleFloatFicha()">🗖 Tela Cheia</button>
+    </div>
+
+    <!-- Botões da Ficha -->
+    <div class="toolbar">
+      <button class="btn btn-purple" id="btnFloatFicha" onclick="toggleFloatFicha()">📌 Flutuar Ficha</button>
+      <button class="btn btn-warning" onclick="abrirFichaPopout()">🗔 Janela Separada</button>
+      <button class="btn btn-green" onclick="salvarNoHistorico()">💾 Salvar Personagem</button>
+      <button class="btn" onclick="togglePainelHistorico()">📂 Fichas Salvas</button>
+      <button class="btn btn-dark" onclick="novoPersonagemLimpo()">✨ Novo</button>
+      <button class="btn btn-dark" onclick="exportarJSON()">📥 Baixar JSON</button>
+      <button class="btn btn-dark" onclick="document.getElementById('importInput').click()">📤 Importar</button>
+      <input type="file" id="importInput" class="hidden" accept=".json" onchange="importarJSON(event)">
+    </div>
+
+    <!-- Painel de Fichas Salvas -->
+    <div id="painelHistorico" class="history-panel hidden">
+      <div class="section-title" style="border:none; margin:0;">
+        <span>Fichas Guardadas neste Aparelho</span>
+        <button class="btn btn-danger" style="padding:2px 6px;" onclick="togglePainelHistorico()">X</button>
+      </div>
+      <div id="listaHistorico" class="history-list"></div>
+    </div>
+
+    <!-- Header da Ficha -->
+    <div class="header-row">
+      <div class="input-group">
+        <label>Nome:</label>
+        <input type="text" id="nome" placeholder="Nome do Herói">
+      </div>
+      <div class="input-group" style="width: 120px;">
+        <label>LV:</label>
+        <select id="level" onchange="atualizarRegrasLevel()">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Classe:</label>
+      <input type="text" id="classe" placeholder="Ex: Guerreiro, Mago...">
+    </div>
+
+    <!-- Bolinhas de HP -->
+    <div class="hp-container" id="hpContainer"></div>
+
+    <!-- Meio -->
+    <div class="grid-middle">
+      <div>
+        <div class="section-title">Perícias</div>
+        <div id="periciasContainer">
+          <div class="pericia-item"><input type="text" placeholder="Perícia 1"><input type="text" class="pericia-val" value="+2"></div>
+          <div class="pericia-item"><input type="text" placeholder="Perícia 2"><input type="text" class="pericia-val" value="+1"></div>
+          <div class="pericia-item"><input type="text" placeholder="Perícia 3"><input type="text" class="pericia-val" value="-1"></div>
+          <div class="pericia-item"><input type="text" placeholder="Perícia 4"><input type="text" class="pericia-val" value="-2"></div>
+        </div>
+
+        <div class="pe-box">
+          <label style="font-size: 13px; font-weight: bold;">PE</label><br>
+          <input type="text" id="peVal" value="0">
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">
+          Habilidades 
+          <button class="btn" style="padding: 2px 6px;" onclick="adicionarHabilidade()">+</button>
+        </div>
+        <div id="habilidadesContainer"></div>
+      </div>
+    </div>
+
+    <!-- Efeitos de classe -->
+    <div>
+      <div class="section-title">
+        Efeitos de classe
+        <button class="btn" style="padding: 2px 6px;" onclick="adicionarEfeitoClasse()">+</button>
+      </div>
+      <div id="efeitosClasseContainer"></div>
+    </div>
+
+    <!-- Itens -->
+    <div>
+      <div class="section-title">Itens / Inventário</div>
+      <div class="items-list" id="itensContainer">
+        <input type="text" placeholder="Item 1">
+        <input type="text" placeholder="Item 2">
+        <input type="text" placeholder="Item 3">
+        <input type="text" placeholder="Item 4">
+        <input type="text" placeholder="Item 5">
+      </div>
+    </div>
+
+    <!-- Ápice (LV 10) -->
+    <div id="apiceSection" class="apice-section hidden">
+      <div class="section-title" style="color: #b45309; border-color: #d97706;">Ápice (Level 10)</div>
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span class="apice-nome-label">Habilidade do Ápice</span> ▼
+        </div>
+        <div class="accordion-content open">
+          <label>Nome:</label><input type="text" class="apice-field" oninput="atualizarAccordionHeader(this, '.apice-nome-label')">
+          <label>Efeito:</label><input type="text" class="apice-field">
+          <label>Alcance:</label><input type="text" class="apice-field">
+          <label>Custo:</label><input type="text" class="apice-field">
+          <label>Requisito:</label><input type="text" class="apice-field">
+          <label>Limitação:</label><input type="text" class="apice-field">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FICHA DE CRIATURAS / MONSTROS ==================== -->
+  <div id="page-criaturas" class="sheet-card hidden">
+    <div class="toolbar">
+      <button class="btn btn-green" onclick="salvarMonstroLocal()">💾 Salvar Criatura</button>
+      <button class="btn" onclick="togglePainelMonstros()">📂 Banco de Criaturas</button>
+      <button class="btn btn-dark" onclick="novaCriaturaLimpa()">✨ Nova Criatura</button>
+    </div>
+
+    <!-- Banco de Monstros -->
+    <div id="painelMonstros" class="history-panel hidden">
+      <div class="section-title" style="border:none; margin:0;">
+        <span>Criaturas Guardadas</span>
+        <button class="btn btn-danger" style="padding:2px 6px;" onclick="togglePainelMonstros()">X</button>
+      </div>
+      <div id="listaMonstros" class="history-list"></div>
+    </div>
+
+    <!-- Moldura da Ficha -->
+    <div class="monster-card-frame">
+      <div class="monster-circles-row">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span style="font-size: 11px; font-weight: bold;">Bolinhas do Monstro:</span>
+          <button class="btn btn-dark" style="padding: 2px 8px;" onclick="alterarQtdBolinhasMonstro(-1)">-</button>
+          <span id="monsterCircleCountDisplay" style="font-weight: bold;">8</span>
+          <button class="btn btn-dark" style="padding: 2px 8px;" onclick="alterarQtdBolinhasMonstro(1)">+</button>
+        </div>
+
+        <div id="monsterCirclesContainer" class="hp-container" style="width: 100%;"></div>
+      </div>
+
+      <div style="text-align: center;">
+        <label style="font-size: 20px; font-weight: 900; display: block; margin-bottom: 4px;">Nome</label>
+        <input type="text" id="monsterName" placeholder="Ex: Acólito das Sombras" style="text-align: center; font-size: 18px; font-weight: bold; width: 100%;">
+      </div>
+
+      <div>
+        <div class="section-title">
+          <span>Habilidades & Ataques:</span>
+          <button class="btn" style="padding: 2px 6px;" onclick="adicionarHabilidadeMonstro()">+</button>
+        </div>
+        <div id="monsterHabilidadesContainer"></div>
+      </div>
+
+      <div class="monster-boxes-footer">
+        <div style="display: flex; gap: 12px;">
+          <div class="monster-square-box">
+            <label>PE</label>
+            <input type="text" id="monsterPE" value="12">
+          </div>
+          <div class="monster-square-box">
+            <label>HP</label>
+            <input type="text" id="monsterHP" value="35">
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+          <label style="font-size: 18px; font-weight: 900;">Grau:</label>
+          <select id="monsterGrau" style="font-size: 16px; font-weight: bold; border-bottom: 3px solid var(--border-color); width: 130px; text-align: center;">
+            <option value="Grau 0">Grau 0</option>
+            <option value="Grau 1" selected>Grau 1</option>
+            <option value="Grau 2">Grau 2</option>
+            <option value="Grau 3">Grau 3</option>
+            <option value="Grau 4">Grau 4</option>
+            <option value="Grau 5">Grau 5</option>
+            <option value="Grau Ápice">Grau Ápice</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== GM SYSTEM ==================== -->
+  <div id="page-gmsystem" class="sheet-card hidden">
+    <div class="section-title">
+      <span>🎲 GM System - Painel do Mestre</span>
+    </div>
+
+    <div class="gm-tab-box">
+      <div style="font-weight: bold; font-size: 14px;">🎲 Rolador de Dados Rápido</div>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+        <button class="btn btn-dark" onclick="rolarDado(4)">d4</button>
+        <button class="btn btn-dark" onclick="rolarDado(6)">d6</button>
+        <button class="btn btn-dark" onclick="rolarDado(8)">d8</button>
+        <button class="btn btn-dark" onclick="rolarDado(10)">d10</button>
+        <button class="btn btn-dark" onclick="rolarDado(12)">d12</button>
+        <button class="btn btn-purple" onclick="rolarDado(20)">d20</button>
+        <button class="btn btn-dark" onclick="rolarDado(100)">d100</button>
+      </div>
+      <div id="diceResultBox" style="font-weight: 900; font-size: 16px; color: #1d4ed8;">Resultado: -</div>
+    </div>
+
+    <div class="gm-tab-box">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: bold; font-size: 14px;">⚔️ Tracker de Iniciativa / Combate</span>
+        <button class="btn btn-green" style="padding: 2px 6px;" onclick="addCombatant()">+ Ator</button>
+      </div>
+      <div id="combatantsList" style="display: flex; flex-direction: column; gap: 6px;"></div>
+    </div>
+
+    <div class="gm-tab-box">
+      <div style="font-weight: bold; font-size: 14px;">⏳ Relógio de Progresso (Clock / Perigos)</div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="text" id="clockTitleInput" placeholder="Nome do Perigo..." style="font-size: 13px;">
+        <select id="clockSegmentsSelect" style="width: 80px; font-size: 13px;">
+          <option value="4">4 Segs</option>
+          <option value="6" selected>6 Segs</option>
+          <option value="8">8 Segs</option>
+        </select>
+        <button class="btn btn-dark" onclick="addClock()">Criar</button>
+      </div>
+      <div id="clocksContainer" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px;"></div>
+    </div>
+
+    <div class="gm-tab-box">
+      <div style="font-weight: bold; font-size: 14px;">📜 Geradores & Tabelas Rápida</div>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+        <button class="btn btn-dark" onclick="gerarNomeNpc()">👤 Nome de NPC</button>
+        <button class="btn btn-dark" onclick="gerarCena()">🌲 Gerar Cena/Clima</button>
+        <button class="btn btn-dark" onclick="gerarSobrevivencia()">🏹 Caçar/Sobrevivência</button>
+        <button class="btn btn-dark" onclick="gerarHex()">🗺️ Preencher Hex</button>
+      </div>
+      <div id="gmGeneratorOutput" style="font-size: 13px; font-weight: bold; background: white; padding: 8px; border: 2px solid var(--border-color); border-radius: 4px;">Clique em uma opção acima para gerar...</div>
+    </div>
+  </div>
+
+  <!-- ==================== LIVRO DE REGRAS GOOGLE DOCS ==================== -->
+  <div id="page-regras" class="docs-container hidden">
+    <div class="docs-toolbar">
+      <button id="authBtn" class="btn btn-warning" onclick="abrirModalSenha()" style="padding: 5px 10px;">Modo Mestre</button>
+
+      <div class="docs-tool-group">
+        <button class="docs-btn" onclick="mudarPagina(-1)">◀</button>
+        <span style="font-weight: 900; font-size: 13px; padding: 0 4px;">Pág. <span id="pageNum">1</span> / <span id="pageTotal">1</span></span>
+        <button class="docs-btn" onclick="mudarPagina(1)">▶</button>
+      </div>
+
+      <div id="docsEditToolbar" class="hidden" style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+        <div class="docs-tool-group">
+          <select class="docs-select" onchange="formatDoc('formatBlock', this.value)">
+            <option value="p">Texto Normal</option>
+            <option value="h1">Título 1</option>
+            <option value="h2">Título 2</option>
+            <option value="h3">Título 3</option>
+          </select>
+        </div>
+
+        <div class="docs-tool-group">
+          <button class="docs-btn" onclick="formatDoc('bold')"><b>B</b></button>
+          <button class="docs-btn" onclick="formatDoc('italic')"><i>I</i></button>
+          <button class="docs-btn" onclick="formatDoc('underline')"><u>U</u></button>
+        </div>
+
+        <div class="docs-tool-group">
+          <button class="btn btn-green" style="padding: 4px 8px; font-size: 12px;" onclick="salvarPaginaNoServidor()">💾 Salvar</button>
+          <button class="btn" style="padding: 4px 8px; font-size: 12px;" onclick="criarNovaPagina()">➕ Nova</button>
+          <button class="btn btn-danger" style="padding: 4px 8px; font-size: 12px;" onclick="deletarPaginaAtual()">🗑️</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="docs-paper-area">
+      <div class="docs-page-sheet">
+        <input type="text" id="ruleTitle" placeholder="Título do Documento..." disabled oninput="atualizarDraftLocal()" style="font-size: 24px; font-weight: 900; border-bottom: 3px solid var(--border-color); padding-bottom: 6px;">
+
+        <div id="drawingSection" class="drawing-panel hidden">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+            <span style="font-size: 12px; font-weight: bold;">Canvas de Desenho:</span>
+            <div style="display: flex; gap: 4px; align-items: center;">
+              <input type="color" id="brushColor" value="#000000" style="width: 26px; height: 24px; border: none; cursor: pointer;">
+              <select id="brushSize" style="font-size: 11px; padding: 2px;">
+                <option value="2">Fino</option>
+                <option value="5" selected>Médio</option>
+                <option value="12">Grosso</option>
+              </select>
+              <button class="btn btn-dark" style="padding: 2px 6px; font-size: 11px;" onclick="setTool('pen')">Lápis</button>
+              <button class="btn btn-dark" style="padding: 2px 6px; font-size: 11px;" onclick="setTool('eraser')">Borracha</button>
+              <button class="btn btn-danger" style="padding: 2px 6px; font-size: 11px;" onclick="limparCanvas()">Limpar</button>
+            </div>
+          </div>
+          <div class="canvas-wrapper">
+            <canvas id="ruleCanvas" width="540" height="280"></canvas>
+          </div>
+        </div>
+
+        <div id="imageUploadControls" class="hidden">
+          <label style="font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 4px;">Anexar Imagem:</label>
+          <input type="file" id="imageInput" accept="image/*" style="font-size: 12px;" onchange="uploadFotoPagina(event)">
+        </div>
+
+        <div id="photoContainer" style="text-align: center; display: none;">
+          <img id="rulePhoto" src="" style="max-width: 100%; border: 2px solid var(--border-color); border-radius: 6px; max-height: 280px; object-fit: contain;">
+        </div>
+
+        <div>
+          <label style="font-size: 12px; font-weight: bold; color: #64748b; display: block; margin-bottom: 4px;">Conteúdo:</label>
+          <div id="ruleTextDocs" class="docs-editable-content" contenteditable="false" oninput="atualizarDraftLocal()"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL DE SENHA DO MESTRE -->
+<div id="modalSenha" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div style="font-weight: 900; font-size: 16px; border-bottom: 2px solid var(--border-color); padding-bottom: 4px;">
+      🔑 Acesso do Mestre
+    </div>
+    <p style="font-size: 13px; margin: 0; color: #475569;">Digite a senha para desbloquear a edição:</p>
+    <input type="password" id="inputSenhaMestre" placeholder="Senha do Mestre" style="border: 2px solid var(--border-color); padding: 8px; font-size: 14px; border-radius: 6px;">
+    <div id="modalMsgErro" class="hidden" style="color: #ef4444; font-size: 12px; font-weight: bold;">Senha incorreta! Tente novamente.</div>
+    <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
+      <button class="btn btn-dark" onclick="fecharModalSenha()">Cancelar</button>
+      <button class="btn btn-green" onclick="verificarSenhaMestre()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST VISUAL DE NOTIFICAÇÃO -->
+<div id="toastNotification">Mensagem do Sistema</div>
+
+<!-- LÓGICA DE GERENCIAMENTO DE DOWNLOAD E TOAST -->
+<script>
+  function showToast(mensagem) {
+    const toast = document.getElementById('toastNotification');
+    toast.innerText = mensagem;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3200);
+  }
+
+  function copiarCodigoFonte() {
+    const fullCode = document.documentElement.outerHTML;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(fullCode).then(() => {
+        showToast("✨ Todo o código HTML foi copiado para a área de transferência!");
+      }).catch(() => {
+        copiarFallback(fullCode);
+      });
+    } else {
+      copiarFallback(fullCode);
+    }
+  }
+
+  function copiarFallback(text) {
+    const dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+    showToast("✨ Todo o código HTML foi copiado!");
+  }
+
+  function baixarArquivoHTML() {
+    const fullCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+    const blob = new Blob([fullCode], { type: "text/html;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Remasnecer_RPG.html";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("💾 Arquivo 'Remasnecer_RPG.html' baixado com sucesso!");
+  }
+</script>
+
+<!-- LÓGICA DO FIREBASE E NAVEGAÇÃO -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+  import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+  const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-remasnecer-app';
+  const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "", authDomain: "", projectId: "" };
+
+  let app, auth, db;
+  try {
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  } catch(e) {
+    console.warn("Firebase operando em modo offline local.", e);
+  }
+
+  let user = null;
+  let pages = [];
+  let currentPageIdx = 0;
+  let isMaster = false;
+
+  const canvas = document.getElementById('ruleCanvas');
+  const ctx = canvas.getContext('2d');
+  let isDrawing = false;
+  let currentTool = 'pen';
+
+  window.navTo = function(pageId) {
+    document.getElementById('page-home').classList.add('hidden');
+    document.getElementById('page-regras').classList.add('hidden');
+    document.getElementById('page-criaturas').classList.add('hidden');
+    document.getElementById('page-gmsystem').classList.add('hidden');
+
+    const ficha = document.getElementById('page-ficha');
+    if (ficha.classList.contains('floating-sheet')) {
+      ficha.classList.remove('hidden');
+    } else {
+      ficha.classList.add('hidden');
+    }
+
+    const target = document.getElementById(`page-${pageId}`);
+    if (target) target.classList.remove('hidden');
+    window.scrollTo(0, 0);
+  };
+
+  window.toggleFloatFicha = function() {
+    const ficha = document.getElementById('page-ficha');
+    const btn = document.getElementById('btnFloatFicha');
+    
+    ficha.classList.toggle('floating-sheet');
+    
+    if (ficha.classList.contains('floating-sheet')) {
+      ficha.classList.remove('hidden');
+      if (btn) btn.innerText = "📺 Restaurar Tela Cheia";
+      ficha.style.top = '';
+      ficha.style.left = '';
+      ficha.style.bottom = '16px';
+      ficha.style.right = '16px';
+      showToast("📌 Ficha fixada no modo flutuante!");
+    } else {
+      if (btn) btn.innerText = "📌 Flutuar Ficha";
+      ficha.style.top = '';
+      ficha.style.left = '';
+      ficha.style.bottom = '';
+      ficha.style.right = '';
+    }
+  };
+
+  let isDraggingFicha = false;
+  let dragOffsetX = 0, dragOffsetY = 0;
+
+  window.iniciarArrastoFicha = function(e) {
+    const ficha = document.getElementById('page-ficha');
+    if (!ficha.classList.contains('floating-sheet')) return;
+
+    if (e.target.tagName === 'BUTTON') return;
+
+    isDraggingFicha = true;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    const rect = ficha.getBoundingClientRect();
+    dragOffsetX = clientX - rect.left;
+    dragOffsetY = clientY - rect.top;
+
+    document.addEventListener('mousemove', moverArrastoFicha);
+    document.addEventListener('mouseup', pararArrastoFicha);
+    document.addEventListener('touchmove', moverArrastoFicha, { passive: false });
+    document.addEventListener('touchend', pararArrastoFicha);
+  };
+
+  function moverArrastoFicha(e) {
+    if (!isDraggingFicha) return;
+    const ficha = document.getElementById('page-ficha');
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    let posX = clientX - dragOffsetX;
+    let posY = clientY - dragOffsetY;
+
+    posX = Math.max(8, Math.min(window.innerWidth - ficha.offsetWidth - 8, posX));
+    posY = Math.max(8, Math.min(window.innerHeight - ficha.offsetHeight - 8, posY));
+
+    ficha.style.left = posX + 'px';
+    ficha.style.top = posY + 'px';
+    ficha.style.bottom = 'auto';
+    ficha.style.right = 'auto';
+
+    if (e.touches && e.cancelable) e.preventDefault();
+  }
+
+  function pararArrastoFicha() {
+    isDraggingFicha = false;
+    document.removeEventListener('mousemove', moverArrastoFicha);
+    document.removeEventListener('mouseup', pararArrastoFicha);
+    document.removeEventListener('touchmove', moverArrastoFicha);
+    document.removeEventListener('touchend', pararArrastoFicha);
+  }
+
+  function desenharLuaPixel(canvasId, size) {
+    const c = document.getElementById(canvasId);
+    if (!c) return;
+    const px = c.getContext('2d');
+    const step = size / 16;
+
+    px.fillStyle = '#1e1b4b';
+    px.fillRect(0, 0, size, size);
+
+    px.fillStyle = '#e0e7ff';
+    px.fillRect(step * 2, step * 3, step, step);
+    px.fillRect(step * 13, step * 2, step, step);
+    px.fillRect(step * 11, step * 12, step, step);
+
+    px.fillStyle = '#c7d2fe';
+    const moon = [
+      [5,4],[6,4],[7,4],[8,4],[9,4],
+      [4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],
+      [4,6],[5,6],[6,6],[7,6],[8,6],[9,6],[10,6],
+      [4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],
+      [4,8],[5,8],[6,8],[7,8],[8,8],[9,8],[10,8],
+      [5,9],[6,9],[7,9],[8,9],[9,9]
+    ];
+    moon.forEach(([x, y]) => px.fillRect(x * step, y * step, step, step));
+
+    px.fillStyle = '#818cf8';
+    px.fillRect(6 * step, 5 * step, step * 2, step * 2);
+    px.fillRect(8 * step, 7 * step, step, step);
+
+    return c.toDataURL('image/png');
+  }
+
+  window.addEventListener('load', () => {
+    desenharLuaPixel('navMoonCanvas', 28);
+  });
+
+  const initAuth = async () => {
+    if (!auth) return;
+    try {
+      if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+        await signInWithCustomToken(auth, __initial_auth_token);
+      } else {
+        await signInAnonymously(auth);
+      }
+    } catch (e) {
+      console.error("Auth error:", e);
+    }
+  };
+  initAuth();
+
+  if (auth) {
+    onAuthStateChanged(auth, (usr) => {
+      user = usr;
+      if (user) {
+        ouvirLivroDeRegras();
+      }
+    });
+  }
+
+  function ouvirLivroDeRegras() {
+    if (!db || !user) return;
+    const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'regras_livro');
+
+    onSnapshot(colRef, (snapshot) => {
+      const docsArr = [];
+      snapshot.forEach(docSnap => {
+        docsArr.push({ id: docSnap.id, ...docSnap.data() });
+      });
+
+      docsArr.sort((a, b) => (a.order || 0) - (b.order || 0));
+      
+      if (docsArr.length > 0) {
+        pages = docsArr;
+      } else if (pages.length === 0) {
+        pages = [{
+          id: 'pagina_1',
+          title: 'Regras de Remasnecer',
+          textHtml: '<h3>Bem-vindo ao Livro de Regras!</h3><p>O Mestre pode clicar em <b>Modo Mestre</b> e digitar a senha <i>Remasnecer</i> para utilizar as ferramentas de edição estilo Google Docs.</p>',
+          canvasData: null,
+          photoData: null,
+          order: 1
+        }];
+      }
+
+      if (currentPageIdx >= pages.length) currentPageIdx = Math.max(0, pages.length - 1);
+      renderizarPaginaAtual();
+    });
+  }
+
+  window.abrirModalSenha = function() {
+    if (isMaster) {
+      isMaster = false;
+      atualizarEstadoMestre();
+      showToast("Modo Mestre desativado.");
+      return;
+    }
+    document.getElementById('modalMsgErro').classList.add('hidden');
+    document.getElementById('modalSenha').classList.remove('hidden');
+    document.getElementById('inputSenhaMestre').value = '';
+    document.getElementById('inputSenhaMestre').focus();
+  };
+
+  window.fecharModalSenha = function() {
+    document.getElementById('modalSenha').classList.add('hidden');
+  };
+
+  window.verificarSenhaMestre = function() {
+    const val = document.getElementById('inputSenhaMestre').value;
+    if (val === "Remasnecer") {
+      isMaster = true;
+      fecharModalSenha();
+      atualizarEstadoMestre();
+      showToast("🔑 Modo Mestre Ativado!");
+    } else {
+      document.getElementById('modalMsgErro').classList.remove('hidden');
+    }
+  };
+
+  function atualizarEstadoMestre() {
+    const authBtn = document.getElementById('authBtn');
+    const docsEditToolbar = document.getElementById('docsEditToolbar');
+    const titleInp = document.getElementById('ruleTitle');
+    const textDocs = document.getElementById('ruleTextDocs');
+    const drawingSection = document.getElementById('drawingSection');
+    const imageUploadControls = document.getElementById('imageUploadControls');
+
+    if (isMaster) {
+      authBtn.innerHTML = `<span>Sair do Mestre</span>`;
+      authBtn.className = 'btn btn-danger';
+      docsEditToolbar.classList.remove('hidden');
+      drawingSection.classList.remove('hidden');
+      imageUploadControls.classList.remove('hidden');
+      titleInp.disabled = false;
+      textDocs.setAttribute('contenteditable', 'true');
+    } else {
+      authBtn.innerHTML = `<span>Modo Mestre</span>`;
+      authBtn.className = 'btn btn-warning';
+      docsEditToolbar.classList.add('hidden');
+      drawingSection.classList.add('hidden');
+      imageUploadControls.classList.add('hidden');
+      titleInp.disabled = true;
+      textDocs.setAttribute('contenteditable', 'false');
+    }
+  }
+
+  function renderizarPaginaAtual() {
+    if (pages.length === 0) return;
+    const p = pages[currentPageIdx];
+
+    document.getElementById('ruleTitle').value = p.title || '';
+    document.getElementById('ruleTextDocs').innerHTML = p.textHtml || p.text || '';
+    document.getElementById('pageNum').innerText = currentPageIdx + 1;
+    document.getElementById('pageTotal').innerText = pages.length;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (p.canvasData) {
+      const img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0);
+      img.src = p.canvasData;
+    }
+
+    const photoCont = document.getElementById('photoContainer');
+    const photoImg = document.getElementById('rulePhoto');
+    if (p.photoData) {
+      photoImg.src = p.photoData;
+      photoCont.style.display = 'block';
+    } else {
+      photoCont.style.display = 'none';
+      photoImg.src = '';
+    }
+  }
+
+  window.formatDoc = function(cmd, val = null) {
+    if (!isMaster) return;
+    document.execCommand(cmd, false, val);
+    atualizarDraftLocal();
+  };
+
+  window.atualizarDraftLocal = function() {
+    if (!pages[currentPageIdx]) return;
+    pages[currentPageIdx].title = document.getElementById('ruleTitle').value;
+    pages[currentPageIdx].textHtml = document.getElementById('ruleTextDocs').innerHTML;
+  };
+
+  window.mudarPagina = function(dir) {
+    const nxt = currentPageIdx + dir;
+    if (nxt >= 0 && nxt < pages.length) {
+      currentPageIdx = nxt;
+      renderizarPaginaAtual();
+    }
+  };
+
+  window.criarNovaPagina = function() {
+    if (!isMaster) return;
+    const nPage = {
+      id: 'pagina_' + Date.now(),
+      title: 'Nova Página',
+      textHtml: '<p>Escreva as regras aqui...</p>',
+      canvasData: null,
+      photoData: null,
+      order: pages.length + 1
+    };
+    pages.push(nPage);
+    currentPageIdx = pages.length - 1;
+    renderizarPaginaAtual();
+    showToast("Nova página criada!");
+  };
+
+  window.uploadFotoPagina = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      if (pages[currentPageIdx]) {
+        pages[currentPageIdx].photoData = evt.target.result;
+        renderizarPaginaAtual();
+        showToast("Imagem anexada!");
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  window.salvarPaginaNoServidor = async function() {
+    if (!isMaster) return;
+    const p = pages[currentPageIdx];
+    if (!p) return;
+5
+    p.title = document.getElementById('ruleTitle').value;
+    p.textHtml = document.getElementById('ruleTextDocs').innerHTML;
+    p.canvasData = canvas.toDataURL();
+
+    if (db && user) {
+      try {
+        const dRef = doc(db, 'artifacts', appId, 'public', 'data', 'regras_livro', p.id);
+        await setDoc(dRef, {
+          title: p.title,
+          textHtml: p.textHtml,
+          canvasData: p.canvasData,
+          photoData: p.photoData || null,
+          order: currentPageIdx + 1,
+          updatedAt: Date.now()
+        });
+        showToast("💾 Página salva no servidor!");
+      } catch (e) {
+        console.error("Erro ao salvar:", e);
+        showToast("Página salva localmente!");
+      }
+    } else {
+      showToast("Página salva localmente!");
+    }
+  };
+
+  window.deletarPaginaAtual = async function() {
+    if (!isMaster) return;
+    if (pages.length <= 1) return;
+
+    const p = pages[currentPageIdx];
+    if (db && user && p.id) {
+      try {
+        const dRef = doc(db, 'artifacts', appId, 'public', 'data', 'regras_livro', p.id);
+        await deleteDoc(dRef);
+      } catch(e){}
+    }
+
+    pages.splice(currentPageIdx, 1);
+    currentPageIdx = Math.max(0, currentPageIdx - 1);
+    renderizarPaginaAtual();
+    showToast("Página excluída!");
+  };
+
+  window.setTool = function(tool) {
+    currentTool = tool;
+  };
+
+  window.limparCanvas = function() {
+    if (!isMaster) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
+  function getCoords(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    let clientX = e.clientX;
+    let clientY = e.clientY;
+
+    if (e.touches && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    }
+
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  }
+
+  function startDraw(e) {
+    if (!isMaster) return;
+    isDrawing = true;
+    const pos = getCoords(e);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+    if (e.type === 'touchstart') e.preventDefault();
+  }
+
+  function doDraw(e) {
+    if (!isDrawing || !isMaster) return;
+    const pos = getCoords(e);
+    const color = document.getElementById('brushColor').value;
+    const size = parseInt(document.getElementById('brushSize').value, 10);
+
+    if (currentTool === 'eraser') {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.lineWidth = size * 3;
+    } else {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = color;
+      ctx.lineWidth = size;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    }
+
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+    if (e.type === 'touchmove') e.preventDefault();
+  }
+
+  function stopDraw() {
+    if (!isDrawing) return;
+    isDrawing = false;
+    ctx.beginPath();
+  }
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', doDraw);
+  canvas.addEventListener('mouseup', stopDraw);
+  canvas.addEventListener('mouseleave', stopDraw);
+
+  canvas.addEventListener('touchstart', startDraw, { passive: false });
+  canvas.addEventListener('touchmove', doDraw, { passive: false });
+  canvas.addEventListener('touchend', stopDraw);
+</script>
+
+<!-- LÓGICA DA FICHA DE MONSTROS / CRIATURAS -->
+<script>
+  let monsterCirclesState = [];
+  let monsterCircleCount = 8;
+
+  function alterarQtdBolinhasMonstro(delta) {
+    monsterCircleCount = Math.max(1, monsterCircleCount + delta);
+    document.getElementById('monsterCircleCountDisplay').innerText = monsterCircleCount;
+    renderMonsterCircles();
+  }
+
+  function renderMonsterCircles() {
+    const container = document.getElementById('monsterCirclesContainer');
+    container.innerHTML = '';
+
+    for (let i = 0; i < monsterCircleCount; i++) {
+      const circle = document.createElement('div');
+      circle.className = 'hp-circle' + (monsterCirclesState[i] ? ' active' : '');
+      circle.onclick = () => {
+        monsterCirclesState[i] = !monsterCirclesState[i];
+        circle.classList.toggle('active');
+        salvarMonstroAuto();
+      };
+      container.appendChild(circle);
+    }
+  }
+
+  function adicionarHabilidadeMonstro(dados = {}) {
+    const container = document.getElementById('monsterHabilidadesContainer');
+    const id = Date.now();
+    const html = `
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span class="mhab-title-${id}">${dados.nome || 'Nova Habilidade / Ataque'}</span> ▼
+        </div>
+        <div class="accordion-content open">
+          <label>Nome:</label><input type="text" value="${dados.nome || ''}" oninput="document.querySelector('.mhab-title-${id}').innerText = this.value || 'Nova Habilidade'; salvarMonstroAuto();">
+          <label>Efeito / Dano:</label><input type="text" value="${dados.efeito || ''}" oninput="salvarMonstroAuto()">
+          <label>Alcance / Custo:</label><input type="text" value="${dados.alcance || ''}" oninput="salvarMonstroAuto()">
+          <button class="btn btn-danger" style="margin-top:6px;" onclick="this.closest('.accordion-item').remove(); salvarMonstroAuto();">Excluir</button>
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+  }
+
+  function obterDadosMonstro() {
+    return {
+      nome: document.getElementById('monsterName').value,
+      pe: document.getElementById('monsterPE').value,
+      hp: document.getElementById('monsterHP').value,
+      grau: document.getElementById('monsterGrau').value,
+      circleCount: monsterCircleCount,
+      circlesState: monsterCirclesState,
+      habilidades: Array.from(document.querySelectorAll('#monsterHabilidadesContainer .accordion-item')).map(item => {
+        const inputs = item.querySelectorAll('input');
+        return { nome: inputs[0].value, efeito: inputs[1].value, alcance: inputs[2].value };
+      })
+    };
+  }
+
+  function carregarDadosMonstro(data) {
+    document.getElementById('monsterName').value = data.nome || '';
+    document.getElementById('monsterPE').value = data.pe || '12';
+    document.getElementById('monsterHP').value = data.hp || '35';
+    document.getElementById('monsterGrau').value = data.grau || 'Grau 1';
+    monsterCircleCount = data.circleCount || 8;
+    monsterCirclesState = data.circlesState || [];
+
+    document.getElementById('monsterCircleCountDisplay').innerText = monsterCircleCount;
+    renderMonsterCircles();
+
+    document.getElementById('monsterHabilidadesContainer').innerHTML = '';
+    (data.habilidades || []).forEach(h => adicionarHabilidadeMonstro(h));
+  }
+
+  function salvarMonstroAuto() {
+    localStorage.setItem('monsterRPG_autosave', JSON.stringify(obterDadosMonstro()));
+  }
+
+  function salvarMonstroLocal() {
+    const data = obterDadosMonstro();
+    const nome = data.nome.trim() || "Criatura sem Nome";
+    let historico = JSON.parse(localStorage.getItem('monstros_historico') || '{}');
+    historico[nome] = data;
+    localStorage.setItem('monstros_historico', JSON.stringify(historico));
+    showToast(`👹 Criatura "${nome}" salva!`);
+    renderizarHistoricoMonstros();
+  }
+
+  function carregarMonstroDoHistorico(chave) {
+    let historico = JSON.parse(localStorage.getItem('monstros_historico') || '{}');
+    if (historico[chave]) {
+      carregarDadosMonstro(historico[chave]);
+      salvarMonstroAuto();
+      togglePainelMonstros();
+      showToast(`Criatura "${chave}" carregada!`);
+    }
+  }
+
+  function deletarMonstroDoHistorico(chave) {
+    let historico = JSON.parse(localStorage.getItem('monstros_historico') || '{}');
+    delete historico[chave];
+    localStorage.setItem('monstros_historico', JSON.stringify(historico));
+    renderizarHistoricoMonstros();
+    showToast("Criatura removida!");
+  }
+
+  function renderizarHistoricoMonstros() {
+    const lista = document.getElementById('listaMonstros');
+    let historico = JSON.parse(localStorage.getItem('monstros_historico') || '{}');
+    const chaves = Object.keys(historico);
+
+    if (chaves.length === 0) {
+      lista.innerHTML = '<div style="font-size:12px; color:#64748b;">Nenhuma criatura salva ainda.</div>';
+      return;
+    }
+
+    lista.innerHTML = chaves.map(chave => `
+      <div class="history-item">
+        <span class="history-item-info" onclick="carregarMonstroDoHistorico('${chave}')">👹 ${chave} (${historico[chave].grau || 'Grau 1'})</span>
+        <button class="btn btn-danger" style="padding:2px 6px;" onclick="deletarMonstroDoHistorico('${chave}')">🗑️</button>
+      </div>
+    `).join('');
+  }
+
+  function togglePainelMonstros() {
+    const painel = document.getElementById('painelMonstros');
+    painel.classList.toggle('hidden');
+    if (!painel.classList.contains('hidden')) renderizarHistoricoMonstros();
+  }
+
+  function novaCriaturaLimpa() {
+    carregarDadosMonstro({
+      nome: '', pe: '10', hp: '30', grau: 'Grau 1', circleCount: 8, circlesState: [], habilidades: []
+    });
+    salvarMonstroAuto();
+    showToast("Nova criatura limpa iniciada!");
+  }
+
+  document.addEventListener('input', (e) => {
+    if (e.target.closest('#page-criaturas')) salvarMonstroAuto();
+  });
+</script>
+
+<!-- LÓGICA DO GM SYSTEM -->
+<script>
+  function rolarDado(lados) {
+    const res = Math.floor(Math.random() * lados) + 1;
+    document.getElementById('diceResultBox').innerText = `Resultado d${lados}: ${res}`;
+  }
+
+  let combatants = [
+    { id: 1, name: 'Guerreiro do Grupo', init: 15, hp: 28 },
+    { id: 2, name: 'Acólito Inimigo', init: 11, hp: 18 }
+  ];
+
+  function renderCombatants() {
+    const container = document.getElementById('combatantsList');
+    container.innerHTML = '';
+    combatants.sort((a,b) => b.init - a.init);
+
+    combatants.forEach((c, idx) => {
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      div.innerHTML = `
+        <div style="font-size: 13px; font-weight: bold;">
+          #${idx + 1} - ${c.name} | Init: <input type="number" value="${c.init}" onchange="c.init = parseInt(this.value); renderCombatants();" style="width: 40px; font-weight: bold;">
+          | HP: <input type="number" value="${c.hp}" onchange="c.hp = parseInt(this.value);" style="width: 50px; font-weight: bold;">
+        </div>
+        <button class="btn btn-danger" style="padding: 2px 6px;" onclick="combatants.splice(${idx}, 1); renderCombatants();">X</button>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function addCombatant() {
+    const nome = prompt("Nome do Ator / Monstro:", "Novo Inimigo");
+    if (!nome) return;
+    const init = parseInt(prompt("Iniciativa:", "10")) || 10;
+    const hp = parseInt(prompt("HP:", "20")) || 20;
+    combatants.push({ id: Date.now(), name: nome, init: init, hp: hp });
+    renderCombatants();
+  }
+
+  let clocks = [];
+
+  function addClock() {
+    const title = document.getElementById('clockTitleInput').value.trim() || 'Perigo';
+    const segs = parseInt(document.getElementById('clockSegmentsSelect').value, 10);
+    clocks.push({ id: Date.now(), title: title, total: segs, filled: 0 });
+    document.getElementById('clockTitleInput').value = '';
+    renderClocks();
+  }
+
+  function renderClocks() {
+    const container = document.getElementById('clocksContainer');
+    container.innerHTML = '';
+
+    clocks.forEach((clk, idx) => {
+      const box = document.createElement('div');
+      box.style.border = '2px solid var(--border-color)';
+      box.style.background = '#ffffff';
+      box.style.padding = '8px';
+      box.style.borderRadius = '6px';
+      box.style.display = 'flex';
+      box.style.flexDirection = 'column';
+      box.style.alignItems = 'center';
+      box.style.gap = '4px';
+
+      box.innerHTML = `
+        <div style="font-size: 12px; font-weight: bold;">${clk.title} (${clk.filled}/${clk.total})</div>
+        <div style="display: flex; gap: 4px;">
+          <button class="btn btn-dark" style="padding: 2px 6px;" onclick="clocks[${idx}].filled = Math.max(0, clocks[${idx}].filled - 1); renderClocks();">-</button>
+          <button class="btn btn-green" style="padding: 2px 6px;" onclick="clocks[${idx}].filled = Math.min(clocks[${idx}].total, clocks[${idx}].filled + 1); renderClocks();">+</button>
+          <button class="btn btn-danger" style="padding: 2px 6px;" onclick="clocks.splice(${idx}, 1); renderClocks();">X</button>
+        </div>
+      `;
+      container.appendChild(box);
+    });
+  }
+
+  function gerarNomeNpc() {
+    const nomes = ["Aethelgard", "Bravok", "Caelen", "Darian", "Elowen", "Fintan", "Garrick", "Halia", "Isolde", "Kaelen"];
+    const sobrenomes = ["Sombras", "Espada-de-Aço", "Névoa", "Vento-Frio", "Pedra-Forjada", "Lua-Cheia"];
+    const n = nomes[Math.floor(Math.random() * nomes.length)];
+    const s = sobrenomes[Math.floor(Math.random() * sobrenomes.length)];
+    document.getElementById('gmGeneratorOutput').innerText = `NPC Gerado: ${n} ${s}`;
+  }
+
+  function gerarCena() {
+    const cenas = [
+      "Uma névoa densa com cheiro de enxofre cobre o ambiente.",
+      "Vento forte uivando entre as ruínas, apagando tochas e criando ecos estranhos.",
+      "Gotas de água gotejam ritmicamente no chão de pedra fria.",
+      "Sussurros ininteligíveis parecem vir das sombras do corredor."
+    ];
+    document.getElementById('gmGeneratorOutput').innerText = cenas[Math.floor(Math.random() * cenas.length)];
+  }
+
+  function gerarSobrevivencia() {
+    const r = Math.floor(Math.random() * 6) + 1;
+    if (r <= 2) document.getElementById('gmGeneratorOutput').innerText = `Resultado Caça (${r}): Nenhum alimento encontrado. Pegadas antigas.`;
+    else if (r <= 5) document.getElementById('gmGeneratorOutput').innerText = `Resultado Caça (${r}): Encontrado frutos silvestres e água limpa (1d4 Rações).`;
+    else document.getElementById('gmGeneratorOutput').innerText = `Resultado Caça (${r}): Caça de grande porte avistada! Exige teste de furtividade.`;
+  }
+
+  function gerarHex() {
+    const hex = [
+      "Hex com Ruínas Antigas guardadas por criaturas.",
+      "Hex de Floresta Fechada com acampamento abandonado.",
+      "Hex com Caverna oculta atrás de uma cachoeira.",
+      "Hex de Terreno plano com vila pacífica de camponeses."
+    ];
+    document.getElementById('gmGeneratorOutput').innerText = hex[Math.floor(Math.random() * hex.length)];
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    renderCombatants();
+  });
+</script>
+
+<!-- LÓGICA DA FICHA DE PERSONAGEM -->
+<script>
+  let hpStates = [];
+
+  function calcularQtdBolinhas(level) {
+    if (level == 1) return 6;
+    if (level == 2 || level == 3) return 7;
+    if (level == 4 || level == 5) return 8;
+    if (level == 6 || level == 7) return 9;
+    return 10;
+  }
+
+  function renderHP() {
+    const level = parseInt(document.getElementById('level').value);
+    const qtdTotal = calcularQtdBolinhas(level);
+    const container = document.getElementById('hpContainer');
+    container.innerHTML = '';
+
+    for (let i = 0; i < qtdTotal; i++) {
+      const circle = document.createElement('div');
+      circle.className = 'hp-circle' + (hpStates[i] ? ' active' : '');
+      circle.onclick = () => {
+        hpStates[i] = !hpStates[i];
+        circle.classList.toggle('active');
+        salvarAuto();
+      };
+      container.appendChild(circle);
+    }
+  }
+
+  function atualizarRegrasLevel() {
+    renderHP();
+    const level = parseInt(document.getElementById('level').value);
+    const apiceSec = document.getElementById('apiceSection');
+    if (level === 10) {
+      apiceSec.classList.remove('hidden');
+    } else {
+      apiceSec.classList.add('hidden');
+    }
+    salvarAuto();
+  }
+
+  function toggleAccordion(header) {
+    header.nextElementSibling.classList.toggle('open');
+  }
+
+  function atualizarAccordionHeader(input, targetSelector) {
+    const item = input.closest('.accordion-item');
+    item.querySelector(targetSelector).innerText = input.value || 'Nova Habilidade';
+  }
+
+  function adicionarHabilidade(dados = {}) {
+    const container = document.getElementById('habilidadesContainer');
+    const id = Date.now();
+    const html = `
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span class="hab-title-${id}">${dados.nome || 'Nova Habilidade'}</span> ▼
+        </div>
+        <div class="accordion-content">
+          <label>Nome:</label><input type="text" value="${dados.nome || ''}" oninput="document.querySelector('.hab-title-${id}').innerText = this.value || 'Nova Habilidade'; salvarAuto();">
+          <label>Efeito:</label><input type="text" value="${dados.efeito || ''}" oninput="salvarAuto()">
+          <label>Alcance:</label><input type="text" value="${dados.alcance || ''}" oninput="salvarAuto()">
+          <label>Custo:</label><input type="text" value="${dados.custo || ''}" oninput="salvarAuto()">
+          <label>Requisito:</label><input type="text" value="${dados.requisito || ''}" oninput="salvarAuto()">
+          <label>Limitação:</label><input type="text" value="${dados.limitacao || ''}" oninput="salvarAuto()">
+          <button class="btn btn-danger" style="margin-top:6px;" onclick="this.closest('.accordion-item').remove(); salvarAuto();">Excluir</button>
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+  }
+
+  function adicionarEfeitoClasse(dados = {}) {
+    const container = document.getElementById('efeitosClasseContainer');
+    const id = Date.now();
+    const html = `
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <span class="eff-title-${id}">${dados.nome || 'Novo Efeito'}</span> ▼
+        </div>
+        <div class="accordion-content">
+          <label>Nome:</label><input type="text" value="${dados.nome || ''}" oninput="document.querySelector('.eff-title-${id}').innerText = this.value || 'Novo Efeito'; salvarAuto();">
+          <label>Efeito Passivo:</label><input type="text" value="${dados.efeitoPassivo || ''}" oninput="salvarAuto()">
+          <label>Fraqueza:</label><input type="text" value="${dados.fraqueza || ''}" oninput="salvarAuto()">
+          <label>Conceito:</label><input type="text" value="${dados.conceito || ''}" oninput="salvarAuto()">
+          <button class="btn btn-danger" style="margin-top:6px;" onclick="this.closest('.accordion-item').remove(); salvarAuto();">Excluir</button>
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+  }
+
+  function obterDadosFormulario() {
+    return {
+      nome: document.getElementById('nome').value,
+      classe: document.getElementById('classe').value,
+      level: document.getElementById('level').value,
+      pe: document.getElementById('peVal').value,
+      hpStates: hpStates,
+      pericias: Array.from(document.querySelectorAll('.pericia-item')).map(item => ({
+        nome: item.children[0].value,
+        val: item.children[1].value
+      })),
+      habilidades: Array.from(document.querySelectorAll('#habilidadesContainer .accordion-item')).map(item => {
+        const inputs = item.querySelectorAll('input');
+        return { nome: inputs[0].value, efeito: inputs[1].value, alcance: inputs[2].value, custo: inputs[3].value, requisito: inputs[4].value, limitacao: inputs[5].value };
+      }),
+      efeitosClasse: Array.from(document.querySelectorAll('#efeitosClasseContainer .accordion-item')).map(item => {
+        const inputs = item.querySelectorAll('input');
+        return { nome: inputs[0].value, efeitoPassivo: inputs[1].value, fraqueza: inputs[2].value, conceito: inputs[3].value };
+      }),
+      itens: Array.from(document.querySelectorAll('#itensContainer input')).map(i => i.value),
+      apice: Array.from(document.querySelectorAll('.apice-field')).map(i => i.value)
+    };
+  }
+
+  function carregarDadosFormulario(data) {
+    document.getElementById('nome').value = data.nome || '';
+    document.getElementById('classe').value = data.classe || '';
+    document.getElementById('level').value = data.level || '1';
+    document.getElementById('peVal').value = data.pe || '0';
+    hpStates = data.hpStates || [];
+
+    atualizarRegrasLevel();
+
+    if (data.pericias) {
+      const pInputs = document.querySelectorAll('.pericia-item');
+      data.pericias.forEach((p, idx) => {
+        if (pInputs[idx]) {
+          pInputs[idx].children[0].value = p.nome;
+          pInputs[idx].children[1].value = p.val;
+        }
+      });
+    }
+
+    document.getElementById('habilidadesContainer').innerHTML = '';
+    (data.habilidades || []).forEach(h => adicionarHabilidade(h));
+
+    document.getElementById('efeitosClasseContainer').innerHTML = '';
+    (data.efeitosClasse || []).forEach(e => adicionarEfeitoClasse(e));
+
+    if (data.itens) {
+      const itemInputs = document.querySelectorAll('#itensContainer input');
+      data.itens.forEach((it, idx) => { if (itemInputs[idx]) itemInputs[idx].value = it; });
+    }
+
+    if (data.apice) {
+      const apiceInputs = document.querySelectorAll('.apice-field');
+      data.apice.forEach((val, idx) => { if (apiceInputs[idx]) apiceInputs[idx].value = val; });
+    }
+  }
+
+  function novoPersonagemLimpo() {
+    carregarDadosFormulario({
+      nome: '', classe: '', level: '1', pe: '0', hpStates: [],
+      pericias: [{nome:'', val:'+2'}, {nome:'', val:'+1'}, {nome:'', val:'-1'}, {nome:'', val:'-2'}],
+      habilidades: [], efeitosClasse: [], itens: ['', '', '', '', ''], apice: []
+    });
+    salvarAuto();
+    showToast("Nova ficha em branco iniciada!");
+  }
+
+  function salvarNoHistorico() {
+    const data = obterDadosFormulario();
+    const nomePersonagem = data.nome.trim() || "Personagem sem Nome";
+    let historico = JSON.parse(localStorage.getItem('fichas_historico') || '{}');
+    historico[nomePersonagem] = data;
+    localStorage.setItem('fichas_historico', JSON.stringify(historico));
+    showToast(`👤 Personagem "${nomePersonagem}" salvo!`);
+    renderizarHistorico();
+  }
+
+  function carregarDoHistorico(chave) {
+    let historico = JSON.parse(localStorage.getItem('fichas_historico') || '{}');
+    if (historico[chave]) {
+      carregarDadosFormulario(historico[chave]);
+      salvarAuto();
+      togglePainelHistorico();
+      showToast(`Ficha de "${chave}" carregada!`);
+    }
+  }
+
+  function deletarDoHistorico(chave) {
+    let historico = JSON.parse(localStorage.getItem('fichas_historico') || '{}');
+    delete historico[chave];
+    localStorage.setItem('fichas_historico', JSON.stringify(historico));
+    renderizarHistorico();
+    showToast("Ficha removida!");
+  }
+
+  function renderizarHistorico() {
+    const lista = document.getElementById('listaHistorico');
+    let historico = JSON.parse(localStorage.getItem('fichas_historico') || '{}');
+    const chaves = Object.keys(historico);
+
+    if (chaves.length === 0) {
+      lista.innerHTML = '<div style="font-size:12px; color:#64748b;">Nenhuma ficha salva ainda.</div>';
+      return;
+    }
+
+    lista.innerHTML = chaves.map(chave => `
+      <div class="history-item">
+        <span class="history-item-info" onclick="carregarDoHistorico('${chave}')">👤 ${chave}</span>
+        <button class="btn btn-danger" style="padding:2px 6px;" onclick="deletarDoHistorico('${chave}')">🗑️</button>
+      </div>
+    `).join('');
+  }
+
+  function togglePainelHistorico() {
+    const painel = document.getElementById('painelHistorico');
+    painel.classList.toggle('hidden');
+    if (!painel.classList.contains('hidden')) renderizarHistorico();
+  }
+
+  function salvarAuto() {
+    localStorage.setItem('fichaRPG_autosave', JSON.stringify(obterDadosFormulario()));
+  }
+
+  function carregarAuto() {
+    const savedData = localStorage.getItem('fichaRPG_autosave');
+    if (savedData) carregarDadosFormulario(JSON.parse(savedData));
+    else atualizarRegrasLevel();
+  }
+
+  function exportarJSON() {
+    const data = obterDadosFormulario();
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `${data.nome || 'ficha'}_RPG.json`);
+    dlAnchor.click();
+    showToast("📥 Ficha exportada em formato JSON!");
+  }
+
+  function importarJSON(event) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const data = JSON.parse(e.target.result);
+      carregarDadosFormulario(data);
+      salvarAuto();
+      if (data.nome) salvarNoHistorico();
+      showToast("📤 Ficha importada com sucesso!");
+    };
+    reader.readAsText(event.target.files[0]);
+  }
+
+  document.addEventListener('input', (e) => {
+    if (e.target.closest('#page-ficha')) salvarAuto();
+  });
+
+  window.abrirFichaPopout = function() {
+    const pop = window.open('', 'Remasnecer_Ficha_Popout', 'width=620,height=780,resizable=yes,scrollbars=yes');
+    if (!pop) {
+      showToast("⚠️ Permita pop-ups no navegador para abrir em janela separada!");
+      return;
+    }
+
+    const sheetNode = document.getElementById('page-ficha');
+    const sheetClone = sheetNode.cloneNode(true);
+    sheetClone.classList.remove('hidden', 'floating-sheet');
+    sheetClone.id = 'page-ficha-popout';
+
+    const popNav = sheetClone.querySelector('.toolbar');
+    if (popNav) {
+      const floatBtn = popNav.querySelector('#btnFloatFicha');
+      if (floatBtn) floatBtn.remove();
+      const popBtn = popNav.querySelector('button[onclick*="abrirFichaPopout"]');
+      if (popBtn) popBtn.remove();
+    }
+
+    pop.document.open();
+    pop.document.write(`
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ficha de Personagem - Popout</title>
+        <style>
+          ${document.querySelector('style').innerHTML}
+          body { padding: 12px; background: #e5e7eb; }
+        </style>
+      </head>
+      <body>
+        <div id="popoutApp"></div>
+        <script>
+          window.addEventListener('storage', (e) => {
+            if (e.key === 'fichaRPG_autosave') {
+              window.location.reload();
+            }
+          });
+        <\/script>
+      </body>
+      </html>
+    `);
+    pop.document.close();
+
+    pop.onload = () => {
+      pop.document.getElementById('popoutApp').appendChild(pop.document.importNode(sheetClone, true));
+      
+      const popDoc = pop.document;
+      const syncInputs = () => {
+        const data = {
+          nome: popDoc.getElementById('nome').value,
+          classe: popDoc.getElementById('classe').value,
+          level: popDoc.getElementById('level').value,
+          pe: popDoc.getElementById('peVal').value,
+          hpStates: Array.from(popDoc.querySelectorAll('#hpContainer .hp-circle')).map(c => c.classList.contains('active')),
+          pericias: Array.from(popDoc.querySelectorAll('.pericia-item')).map(item => ({
+            nome: item.children[0].value,
+            val: item.children[1].value
+          })),
+          habilidades: Array.from(popDoc.querySelectorAll('#habilidadesContainer .accordion-item')).map(item => {
+            const inputs = item.querySelectorAll('input');
+            return { nome: inputs[0].value, efeito: inputs[1].value, alcance: inputs[2].value, custo: inputs[3].value, requisito: inputs[4].value, limitacao: inputs[5].value };
+          }),
+          efeitosClasse: Array.from(popDoc.querySelectorAll('#efeitosClasseContainer .accordion-item')).map(item => {
+            const inputs = item.querySelectorAll('input');
+            return { nome: inputs[0].value, efeitoPassivo: inputs[1].value, fraqueza: inputs[2].value, conceito: inputs[3].value };
+          }),
+          itens: Array.from(popDoc.querySelectorAll('#itensContainer input')).map(i => i.value),
+          apice: Array.from(popDoc.querySelectorAll('.apice-field')).map(i => i.value)
+        };
+        localStorage.setItem('fichaRPG_autosave', JSON.stringify(data));
+      };
+
+      popDoc.addEventListener('input', syncInputs);
+      popDoc.addEventListener('click', (e) => {
+        if (e.target.classList.contains('hp-circle')) {
+          e.target.classList.toggle('active');
+          syncInputs();
+        }
+      });
+    };
+  };
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'fichaRPG_autosave') {
+      carregarAuto();
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', carregarAuto);
+</script>
+
+</body>
+</html>
